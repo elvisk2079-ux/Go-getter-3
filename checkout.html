@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>At the Checkout — Go Getter 3</title>
+<style>
+:root{--paper:#f1f4f0;--card:#fff;--ink:#1b2733;--muted:#5b6977;--line:#d6dcd5;--blue:#2a55c9;--soft:#e4ebfb;--green:#1d8455;--pale:#dcf1e5;--red:#bf3f2d}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 system-ui,-apple-system,Arial,sans-serif}.wrap{max-width:760px;margin:auto;padding:18px 16px}a{color:var(--blue)}h1{font-family:Georgia,serif;font-size:clamp(30px,6vw,42px);font-weight:400;line-height:1.15;margin:12px 0 8px}h2{font-size:21px;margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:14px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center}.bar{height:7px;background:var(--line);border-radius:10px;overflow:hidden;margin:12px 0 6px}.fill{height:100%;background:var(--green);width:0%;transition:width .2s}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px;margin:16px 0}.pill{display:inline-block;background:var(--soft);color:var(--blue);padding:4px 10px;border-radius:99px;font-size:13px;font-weight:650}button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:white;color:var(--ink)}button:hover{border-color:var(--blue)}button.primary{background:var(--blue);border-color:var(--blue);color:white}button:disabled{opacity:.5;cursor:default}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.word{font-size:clamp(26px,6vw,38px);font-weight:750}.emoji{font-size:76px;line-height:1.4}.center{text-align:center}.answer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}.answer button{text-align:center;min-height:58px}.answer button.good{border:2px solid var(--green);background:var(--pale)}.answer button.bad{border:2px solid var(--red);background:#f8e2dd}.feedback{min-height:28px;font-weight:650;margin-top:12px}.goodtext{color:var(--green)}.badtext{color:var(--red)}input{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px}input:focus{outline:2px solid var(--blue)}.sent{font-size:21px;line-height:1.8}.bank{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.bank button{padding:7px 12px}.steps{display:flex;flex-wrap:wrap;gap:5px;margin:14px 0}.step{font-size:12px;padding:5px 8px;border:1px solid var(--line);border-radius:99px}.step.active{background:var(--soft);border-color:var(--blue);color:var(--blue)}.step.done{background:var(--pale);border-color:var(--green)}.summary{font-size:21px;line-height:1.7}.hide{display:none}@media(max-width:450px){.answer{grid-template-columns:1fr 1fr}.card{padding:16px}.wrap{padding:14px}button{padding:9px 11px}} 
+</style></head><body><div class="wrap">
+<div class="top"><a href="index.html">← Go Getter 3</a><span class="pill">Shops · 4</span></div>
+<h1>At the Checkout 🛒</h1><p class="muted">Алиса, выучи 8 слов и выполни задания. Слова можно прослушать 🔊</p>
+<div class="bar"><div class="fill" id="fill"></div></div><div class="small muted" id="progress">Карточки · 1 из 8</div>
+<div class="steps" id="steps"></div>
+<main class="card" id="area" aria-live="polite"></main>
+<div class="actions"><button id="back">← Назад</button><button class="primary" id="next">Дальше →</button><button id="reset">Начать заново</button></div>
+<p class="small muted">Озвучка использует голос браузера (English). На телефоне звук может зависеть от настроек устройства.</p>
+</div><script>
+const words=[
+{en:"carry",ru:"нести, переносить",pic:"🛍️",ex:"Can you carry this bag?"},
+{en:"cash",ru:"наличные деньги",pic:"💵",ex:"I want to pay in cash."},
+{en:"cashier",ru:"кассир",pic:"🧑‍💼",ex:"The cashier is very friendly."},
+{en:"change",ru:"сдача",pic:"🪙",ex:"Here is your change."},
+{en:"list",ru:"список",pic:"📝",ex:"I have a shopping list."},
+{en:"queue",ru:"очередь",pic:"🚶‍♀️🚶‍♂️",ex:"There is a long queue."},
+{en:"receipt",ru:"чек",pic:"🧾",ex:"Keep your receipt."},
+{en:"trolley",ru:"тележка для покупок",pic:"🛒",ex:"Put the apples in the trolley."}
+];
+const gaps=[
+["Take a shopping ___ before you go to the supermarket.","list"],
+["The ___ scans the items at the checkout.","cashier"],
+["We have to wait in a long ___.","queue"],
+["Can you ___ these heavy bags?","carry"],
+["Would you like to pay by card or in ___?","cash"],
+["Keep the ___ in case you need to return something.","receipt"],
+["Put the milk and bread in the ___.","trolley"],
+["I gave the cashier £10 and got £2 in ___.","change"]
+];
+const sentences=[
+["I need a trolley for my shopping.","Мне нужна тележка для покупок."],
+["There is a long queue at the checkout.","На кассе длинная очередь."],
+["The cashier gave me a receipt.","Кассир дал мне чек."],
+["Can you carry these bags?","Ты можешь нести эти сумки?"],
+["I always write a shopping list.","Я всегда пишу список покупок."],
+["Please keep your change.","Пожалуйста, оставьте сдачу."],
+["I paid in cash.","Я заплатил наличными."],
+["The cashier is waiting for us.","Кассир ждёт нас."]
+];
+let stage=0,idx=0, flipped=false, answered=false,wrong=0,correct=0;
+const stages=["Карточки","Перевод","Послушай","Выбери слово","Вставь слово","Напиши слово","Предложения","Результат"];
+const area=document.getElementById("area"),next=document.getElementById("next"),back=document.getElementById("back");
+function speak(s){if(!("speechSynthesis" in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(s);u.lang="en-GB";u.rate=.82;speechSynthesis.speak(u)}
+function shuffle(a){return a.slice().sort(()=>Math.random()-.5)}
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function count(){return stage===7?0:8}
+function progress(){document.getElementById("fill").style.width=Math.round(((stage*8+idx)/(7*8))*100)+"%";document.getElementById("progress").textContent=stage===7?"Готово!":stages[stage]+" · "+(idx+1)+" из 8";document.getElementById("steps").innerHTML=stages.map((s,i)=>'<span class="step '+(i===stage?'active':i<stage?'done':'')+'">'+(i+1)+". "+s+"</span>").join("");back.disabled=stage===0&&idx===0;next.textContent=stage===7?"Ещё раз ↻":"Дальше →";next.disabled=stage>0&&stage<7&&!answered}
+function feedback(ok,msg){answered=true;if(ok)correct++;else wrong++;const el=document.getElementById("feedback");if(el){el.className="feedback "+(ok?"goodtext":"badtext");el.textContent=(ok?"✓ Верно! ":"✗ Попробуй запомнить: ")+msg}next.disabled=false}
+function options(correctValue,labels,callback){const list=shuffle(labels);return '<div class="answer">'+list.map((w)=>'<button data-choice="'+esc(w)+'">'+esc(w)+'</button>').join("")+'</div>'}
+function optionEvents(right){area.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{if(answered)return;const ok=b.dataset.choice===right;b.classList.add(ok?"good":"bad");area.querySelectorAll("[data-choice]").forEach(k=>k.disabled=true);feedback(ok,right)})}
+function render(){answered=stage===0||stage===7;progress();const w=words[idx];
+if(stage===0){area.innerHTML='<div class="center"><div class="pill">Flashcards · нажми на карточку</div><div id="flip" style="cursor:pointer;padding:18px 4px"><div class="emoji">'+w.pic+'</div><div class="word" id="front">'+esc(flipped?w.ru:w.en)+'</div><div class="muted">'+(flipped?"Нажми, чтобы увидеть английский":"Нажми, чтобы увидеть перевод")+'</div></div><button id="speak">🔊 Listen</button><p class="small muted">'+esc(w.ex)+'</p></div>';area.querySelector("#flip").onclick=()=>{flipped=!flipped;render()};area.querySelector("#speak").onclick=()=>speak(w.en);return}
+if(stage===1){area.innerHTML='<div class="pill">Choose the translation</div><h2>'+esc(w.en)+'</h2>'+options(w.ru,shuffle(words.filter(v=>v.en!==w.en)).slice(0,3).map(v=>v.ru).concat(w.ru))+'<p class="feedback" id="feedback"></p>';optionEvents(w.ru);return}
+if(stage===2){area.innerHTML='<div class="pill">Listen and choose</div><h2>Какое слово ты слышишь?</h2><button id="listen">🔊 Слушать</button>'+options(w.en,shuffle(words.filter(v=>v.en!==w.en)).slice(0,3).map(v=>v.en).concat(w.en))+'<p class="feedback" id="feedback"></p>';area.querySelector("#listen").onclick=()=>speak(w.en);optionEvents(w.en);return}
+if(stage===3){const q=gaps[idx];area.innerHTML='<div class="pill">Choose the word</div><p class="sent">'+esc(q[0])+'</p>'+options(q[1],shuffle(words.filter(v=>v.en!==q[1])).slice(0,3).map(v=>v.en).concat(q[1]))+'<p class="feedback" id="feedback"></p>';optionEvents(q[1]);return}
+if(stage===4){const q=gaps[idx];area.innerHTML='<div class="pill">Complete the sentence</div><div class="bank">'+words.map(v=>'<button class="bankword">'+v.en+'</button>').join("")+'</div><p class="sent">'+esc(q[0])+'</p><div class="feedback" id="feedback"></div>';area.querySelectorAll(".bankword").forEach(b=>b.onclick=()=>{if(answered)return;feedback(b.textContent===q[1],q[1]);b.classList.add(b.textContent===q[1]?"good":"bad")});return}
+if(stage===5){area.innerHTML='<div class="pill">Type the English word</div><h2>'+esc(w.ru)+'</h2><input id="typing" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Write in English"><div class="actions"><button id="check">Проверить</button><button id="audio">🔊 Подсказка</button></div><p class="feedback" id="feedback"></p>';area.querySelector("#check").onclick=()=>{if(answered)return;const v=area.querySelector("#typing").value.trim().toLowerCase();if(!v)return;feedback(v===w.en,w.en)};area.querySelector("#typing").onkeydown=e=>{if(e.key==="Enter")area.querySelector("#check").click()};area.querySelector("#audio").onclick=()=>speak(w.en);return}
+if(stage===6){const q=sentences[idx];area.innerHTML='<div class="pill">Read and understand</div><p class="sent">'+esc(q[0])+'</p><button id="say">🔊 Listen</button><h2>Что означает предложение?</h2>'+options(q[1],shuffle(sentences.filter(v=>v[1]!==q[1])).slice(0,3).map(v=>v[1]).concat(q[1]))+'<p class="feedback" id="feedback"></p>';area.querySelector("#say").onclick=()=>speak(q[0]);optionEvents(q[1]);return}
+area.innerHTML='<div class="center"><div class="emoji">🎉</div><h2>Молодец, Алиса!</h2><p class="summary">Ты закончила тренировку.<br>Правильных ответов: <strong>'+correct+'</strong><br>Ошибок: <strong>'+wrong+'</strong></p><p class="muted">Повтори слова, которые были сложными, и попробуй ещё раз.</p></div>';}
+function advance(){if(stage===7){restart();return}if(idx<7)idx++;else{stage++;idx=0}flipped=false;render()}
+function previous(){if(idx>0)idx--;else if(stage>0){stage--;idx=7}flipped=false;render()}
+function restart(){stage=0;idx=0;flipped=false;wrong=0;correct=0;render()}
+next.onclick=advance;back.onclick=previous;document.getElementById("reset").onclick=()=>{if(confirm("Начать тренировку заново?"))restart()};render();
+</script></body></html>
