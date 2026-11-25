@@ -252,7 +252,7 @@ body { font-size: 18px; }
   <a class="home" href="../index.html">← Все темы</a>
   <p class="eyebrow">Go Getter 3 · 5 класс · Vocabulary · Shops · Покупки из упражнения 6</p>
   <h1>What Can You Buy?</h1>
-  <p class="sub">19 слов — sofa, skirt, cup, trainers, vitamins, thermometer, magazines, comic books… Карточки, потом задания: где купить, переводим, пишем.</p>
+  <p class="sub">19 слов — sofa, skirt, cup, trainers, vitamins, thermometer, magazines, comic books… Карточки с картинками для знакомства со словами. После них — текстовые задания: где купить, контекст, фразы и перевод.</p>
 </header>
 
 
@@ -311,13 +311,10 @@ const P = [
 const SHOP = ["department store", "sports shop", "chemist's", "baker's", "clothes shop", "newsagent's", "greengrocer's", "shoe shop", "bookshop"];
 const where = (id, img, word, right) => ({ id, img, q: `${word} — where can you buy them?`, o: [right, ...SHOP.filter(s => s !== right).sort(() => Math.random() - .5).slice(0, 3)] });
 const DRILLS = [
-  { type: "listenpic", title: "Послушай и найди", short: "Слушаем", instr: "Нажми 🔊, послушай слово и нажми на нужную картинку." },
-  { type: "pic", title: "Что это?", short: "Картинки", instr: "Посмотри на картинку и выбери слово." },
-  { type: "pick", title: "Прочитай и найди", short: "Читаем", instr: "Прочитай слово и нажми на нужную картинку." },
-  { type: "match", title: "Найди пару", short: "Пары", instr: "Нажми на английское слово, потом на перевод." },
-  { type: "listen", title: "Послушай и переведи", short: "На слух", instr: "Нажми 🔊, послушай слово и выбери перевод." },
-  { type: "ru2en", title: "Переведи на английский", short: "RU → EN", instr: "Прочитай слово по-русски и выбери английское." },
-  { type: "en2ru", title: "Переведи на русский", short: "EN → RU", instr: "Прочитай слово по-английски и выбери перевод." },
+{ type: "match", title: "Найди пару", short: "Пары", instr: "Соедини английские слова с русскими значениями." },
+  { type: "listen", title: "Послушай и переведи", short: "На слух", instr: "Послушай слово без картинки и выбери точный перевод." },
+  { type: "ru2en", title: "Переведи на английский", short: "RU → EN", instr: "Выбери английский эквивалент." },
+  { type: "en2ru", title: "Переведи на русский", short: "EN → RU", instr: "Выбери точный русский эквивалент." },
   { type: "mcq", title: "В каком магазине?", short: "Магазин", instr: "Где это можно купить? Выбери магазин.",
     items: [
       where("sofa", "couch-and-lamp", "A sofa", "department store"),
@@ -342,41 +339,41 @@ const DRILLS = [
   { type: "sort", title: "Одежда, обувь или еда?", short: "Группы", instr: "Разложи слова по группам.",
     buckets: ["👗 clothes", "👟 shoes", "🍞 food"],
     items: [
-      { id: "skirt", img: "skirt", t: "a skirt", b: 0 }, { id: "jeans", img: "jeans", t: "jeans", b: 0 }, { id: "dresses", img: "dress", t: "dresses", b: 0 },
-      { id: "trainers", img: "running-shoe", t: "trainers", b: 1 }, { id: "boots", img: "hiking-boot", t: "boots", b: 1 }, { id: "shoes", img: "mans-shoe", t: "shoes", b: 1 },
-      { id: "bread", img: "bread", t: "bread", b: 2 }, { id: "cakes", img: "birthday-cake", t: "cakes", b: 2 }, { id: "fruit", img: "banana grapes", t: "fruit", b: 2 }, { id: "vegetables", img: "carrot broccoli", t: "vegetables", b: 2 }
+      { id: "skirt", t: "a skirt", b: 0 }, { id: "jeans", t: "jeans", b: 0 }, { id: "dresses", t: "dresses", b: 0 },
+      { id: "trainers", t: "trainers", b: 1 }, { id: "boots", t: "boots", b: 1 }, { id: "shoes", t: "shoes", b: 1 },
+      { id: "bread", t: "bread", b: 2 }, { id: "cakes", t: "cakes", b: 2 }, { id: "fruit", t: "fruit", b: 2 }, { id: "vegetables", t: "vegetables", b: 2 }
     ] },
   { type: "gaps", title: "Список покупок", short: "Покупки", instr: "Прочитай и выбери слово.",
     items: [
-      { id: "sofa", img: "couch-and-lamp", t: "We want to sit in the living room. We need a new {{*sofa|cup|skirt}}." },
-      { id: "cup", img: "hot-beverage", t: "I want some tea. Can I have a {{*cup|boot|sofa}}, please?" },
-      { id: "skirt", img: "skirt", t: "My sister wants a red {{*skirt|thermometer|bread}} for the party." },
-      { id: "tennisballs", img: "tennis", t: "We play tennis on Saturdays. We need new {{*tennis balls|vitamins|newspapers}}." },
-      { id: "trainers", img: "running-shoe", t: "I run in the park every day in my {{*trainers|cakes|magazines}}." },
-      { id: "vitamins", img: "pill", t: "It's winter. Grandma takes {{*vitamins|jeans|comic books}} every morning." },
-      { id: "thermometer", img: "thermometer", t: "I feel ill. Where is the {{*thermometer|sofa|skirt}}?" },
-      { id: "bread", img: "bread", t: "Let's make sandwiches. We need {{*bread|boots|tennis balls}}." },
-      { id: "cakes", img: "birthday-cake", t: "It's my birthday! Let's buy some {{*cakes|newspapers|trainers}}." },
-      { id: "jeans", img: "jeans", t: "My favourite clothes are blue {{*jeans|vitamins|vegetables}} and a T-shirt." },
-      { id: "dresses", img: "dress", t: "The clothes shop has got beautiful {{*dresses|thermometers|cups}}." },
-      { id: "newspapers", img: "newspaper", t: "Grandad reads two {{*newspapers|cakes|boots}} every day." },
-      { id: "magazines", img: "magazine", t: "I love {{*magazines|vitamins|sofas}} about animals and sport." },
-      { id: "fruit", img: "banana grapes", t: "Apples, bananas and grapes are {{*fruit|vegetables|shoes}}." },
-      { id: "vegetables", img: "carrot broccoli", t: "Carrots, potatoes and tomatoes are {{*vegetables|fruit|magazines}}." },
-      { id: "boots", img: "hiking-boot", t: "It's cold and snowy. Put on your warm {{*boots|cups|cakes}}!" },
-      { id: "shoes", img: "mans-shoe", t: "Dad needs black {{*shoes|bread|tennis balls}} for work." },
-      { id: "schoolbooks", img: "school-backpack books", t: "My bag is very heavy. There are a lot of {{*school books|cakes|cups}} in it." },
-      { id: "comics", img: "superhero open-book", t: "My brother loves Spider-Man {{*comic books|vitamins|boots}}." }
+      { id: "sofa", t: "We want to sit in the living room. We need a new {{*sofa|cup|skirt}}." },
+      { id: "cup", t: "I want some tea. Can I have a {{*cup|boot|sofa}}, please?" },
+      { id: "skirt", t: "My sister wants a red {{*skirt|thermometer|bread}} for the party." },
+      { id: "tennisballs", t: "We play tennis on Saturdays. We need new {{*tennis balls|vitamins|newspapers}}." },
+      { id: "trainers", t: "I run in the park every day in my {{*trainers|cakes|magazines}}." },
+      { id: "vitamins", t: "It's winter. Grandma takes {{*vitamins|jeans|comic books}} every morning." },
+      { id: "thermometer", t: "I feel ill. Where is the {{*thermometer|sofa|skirt}}?" },
+      { id: "bread", t: "Let's make sandwiches. We need {{*bread|boots|tennis balls}}." },
+      { id: "cakes", t: "It's my birthday! Let's buy some {{*cakes|newspapers|trainers}}." },
+      { id: "jeans", t: "My favourite clothes are blue {{*jeans|vitamins|vegetables}} and a T-shirt." },
+      { id: "dresses", t: "The clothes shop has got beautiful {{*dresses|thermometers|cups}}." },
+      { id: "newspapers", t: "Grandad reads two {{*newspapers|cakes|boots}} every day." },
+      { id: "magazines", t: "I love {{*magazines|vitamins|sofas}} about animals and sport." },
+      { id: "fruit", t: "Apples, bananas and grapes are {{*fruit|vegetables|shoes}}." },
+      { id: "vegetables", t: "Carrots, potatoes and tomatoes are {{*vegetables|fruit|magazines}}." },
+      { id: "boots", t: "It's cold and snowy. Put on your warm {{*boots|cups|cakes}}!" },
+      { id: "shoes", t: "Dad needs black {{*shoes|bread|tennis balls}} for work." },
+      { id: "schoolbooks", t: "My bag is very heavy. There are a lot of {{*school books|cakes|cups}} in it." },
+      { id: "comics", t: "My brother loves Spider-Man {{*comic books|vitamins|boots}}." }
     ] },
   { type: "order", title: "Собери предложение", short: "Фразы", instr: "Нажимай на слова по порядку, чтобы получилось предложение.",
     items: [
-      { id: "trainers", img: "running-shoe", q: "Где можно купить кроссовки?", s: "Where can you buy trainers?" },
-      { id: "vitamins", img: "pill", q: "Мне нужны витамины.", s: "I need some vitamins." },
-      { id: "cakes", img: "birthday-cake", q: "Можно мне два пирожных, пожалуйста?", s: "Can I have two cakes, please?" },
-      { id: "jeans", img: "jeans", q: "Эти джинсы слишком дорогие.", s: "These jeans are too expensive." },
-      { id: "comics", img: "superhero open-book", q: "Я люблю читать комиксы.", s: "I love reading comic books." },
-      { id: "fruit", img: "banana grapes", q: "Фрукты и овощи полезны.", s: "Fruit and vegetables are healthy." },
-      { id: "sofa", img: "couch-and-lamp", q: "Наш новый диван очень удобный.", s: "Our new sofa is very comfortable." }
+      { id: "trainers", q: "Где можно купить кроссовки?", s: "Where can you buy trainers?" },
+      { id: "vitamins", q: "Мне нужны витамины.", s: "I need some vitamins." },
+      { id: "cakes", q: "Можно мне два пирожных, пожалуйста?", s: "Can I have two cakes, please?" },
+      { id: "jeans", q: "Эти джинсы слишком дорогие.", s: "These jeans are too expensive." },
+      { id: "comics", q: "Я люблю читать комиксы.", s: "I love reading comic books." },
+      { id: "fruit", q: "Фрукты и овощи полезны.", s: "Fruit and vegetables are healthy." },
+      { id: "sofa", q: "Наш новый диван очень удобный.", s: "Our new sofa is very comfortable." }
     ] },
   { type: "translate", title: "Переведи предложение", short: "Перевод", instr: "Напиши по-английски. Главное — правильное слово.",
     items: [
@@ -391,8 +388,7 @@ const DRILLS = [
       { id: "tennisballs", ru: "У меня есть три теннисных мяча.", en: "I've got three tennis balls.", key: "tennis balls" },
       { id: "shoes", ru: "Эти туфли красивые.", en: "These shoes are beautiful.", key: "shoes" }
     ] },
-  { type: "letters", title: "Собери слово из букв", short: "Буквы", instr: "Нажимай на буквы по порядку, чтобы получилось слово." },
-  { type: "write", title: "Напиши по-английски", short: "Пишем", instr: "Посмотри на картинку и перевод и напиши слово. Забыл — вернись к карточкам." }
+  { type: "letters", title: "Собери слово из букв", short: "Буквы", instr: "Нажимай на буквы по порядку, чтобы получилось слово." }
 ];
 
 /* ===== Drill engine (shared). Expects META, P, DRILLS defined before this script. ===== */
