@@ -252,7 +252,7 @@ body { font-size: 18px; }
   <a class="home" href="../index.html">← Все темы</a>
   <p class="eyebrow">Go Getter 3 · 5 класс · Vocabulary · Shops · Какие магазины? too / not … enough / (not) as … as</p>
   <h1>Describing Shops</h1>
-  <p class="sub">16 прилагательных из рамки упр. 7 — bad, boring, busy, cheap, clean, dirty, exciting, expensive… Карточки, противоположности, потом too, enough и as … as в предложениях.</p>
+  <p class="sub">16 прилагательных из рамки упр. 7 — bad, boring, busy, cheap, clean, dirty, exciting, expensive… Карточки с картинками для знакомства со словами. Затем — текстовая практика: противоположности, контекст, too, enough и as … as.</p>
 </header>
 
 
@@ -307,11 +307,10 @@ const P = [
 ];
 const opp = (id, w, right, a, b) => ({ id, q: `The opposite of «${w}» is…`, o: [right, a, b] });
 const DRILLS = [
-  { type: "pic", title: "Какое слово?", short: "Картинки", instr: "Посмотри на картинку и выбери прилагательное." },
-  { type: "match", title: "Найди пару", short: "Пары", instr: "Нажми на английское слово, потом на перевод." },
-  { type: "listen", title: "Послушай и переведи", short: "На слух", instr: "Нажми 🔊, послушай слово и выбери перевод." },
-  { type: "ru2en", title: "Переведи на английский", short: "RU → EN", instr: "Прочитай слово по-русски и выбери английское." },
-  { type: "en2ru", title: "Переведи на русский", short: "EN → RU", instr: "Прочитай слово по-английски и выбери перевод." },
+{ type: "match", title: "Найди пару", short: "Пары", instr: "Соедини английские слова с русскими значениями." },
+  { type: "listen", title: "Послушай и переведи", short: "На слух", instr: "Послушай слово без картинки и выбери точный перевод." },
+  { type: "ru2en", title: "Переведи на английский", short: "RU → EN", instr: "Выбери английский эквивалент." },
+  { type: "en2ru", title: "Переведи на русский", short: "EN → RU", instr: "Выбери точный русский эквивалент." },
   { type: "mcq", title: "Противоположности", short: "Наоборот", instr: "Выбери слово с противоположным значением.",
     items: [
       opp("good", "bad", "good", "busy", "long"), opp("bad", "good", "bad", "new", "quiet"),
@@ -325,22 +324,22 @@ const DRILLS = [
     ] },
   { type: "gaps", title: "Какой магазин?", short: "Описания", instr: "Прочитай и выбери подходящее слово.",
     items: [
-      { id: "expensive", img: "money-bag", t: "The jeans cost 200 pounds! They are very {{*expensive|cheap|quiet}}." },
-      { id: "cheap", img: "coin", t: "The cakes are only 50p. They are {{*cheap|expensive|long}}." },
-      { id: "busy", img: "busts-in-silhouette", t: "There are a lot of people in the shop. It's very {{*busy|quiet|clean}}." },
-      { id: "quiet", img: "shushing-face", t: "There's nobody in the library. It's {{*quiet|busy|exciting}}." },
-      { id: "dirty", img: "wastebasket fly", t: "There is rubbish on the floor. The shop is {{*dirty|clean|new}}." },
-      { id: "clean", img: "soap sparkles", t: "The floor is white and shiny. The shop is very {{*clean|dirty|bad}}." },
-      { id: "friendly", img: "smiling-face-with-smiling-eyes", t: "The shop assistants always smile and help you. They're {{*friendly|boring|short}}." },
-      { id: "long", img: "hourglass-not-done", t: "We wait for 30 minutes. The queue is very {{*long|short|cheap}}." },
-      { id: "short", img: "stopwatch", t: "There are only two people in front of me. The queue is {{*short|long|busy}}." },
-      { id: "modern", img: "office-building", t: "The shopping centre has got glass walls and robots. It's very {{*modern|old|dirty}}." },
-      { id: "old", img: "derelict-house", t: "This bookshop is 150 years old. It's very {{*old|new|modern}}." },
-      { id: "new", img: "new-button", t: "The sports shop opened last week. It's {{*new|old|boring}}." },
-      { id: "boring", img: "yawning-face", t: "There is nothing interesting in this shop. It's {{*boring|exciting|friendly}}." },
-      { id: "exciting", img: "star-struck", t: "The toy shop has got games, robots and a train. It's {{*exciting|boring|dirty}}!" },
-      { id: "good", img: "thumbs-up", t: "The bread at this baker's is delicious. It's a {{*good|bad|quiet}} baker's." },
-      { id: "bad", img: "thumbs-down", t: "The fruit at this greengrocer's is old. It's a {{*bad|good|modern}} shop." }
+      { id: "expensive", t: "The jeans cost 200 pounds! They are very {{*expensive|cheap|quiet}}." },
+      { id: "cheap", t: "The cakes are only 50p. They are {{*cheap|expensive|long}}." },
+      { id: "busy", t: "There are a lot of people in the shop. It's very {{*busy|quiet|clean}}." },
+      { id: "quiet", t: "There's nobody in the library. It's {{*quiet|busy|exciting}}." },
+      { id: "dirty", t: "There is rubbish on the floor. The shop is {{*dirty|clean|new}}." },
+      { id: "clean", t: "The floor is white and shiny. The shop is very {{*clean|dirty|bad}}." },
+      { id: "friendly", t: "The shop assistants always smile and help you. They're {{*friendly|boring|short}}." },
+      { id: "long", t: "We wait for 30 minutes. The queue is very {{*long|short|cheap}}." },
+      { id: "short", t: "There are only two people in front of me. The queue is {{*short|long|busy}}." },
+      { id: "modern", t: "The shopping centre has got glass walls and robots. It's very {{*modern|old|dirty}}." },
+      { id: "old", t: "This bookshop is 150 years old. It's very {{*old|new|modern}}." },
+      { id: "new", t: "The sports shop opened last week. It's {{*new|old|boring}}." },
+      { id: "boring", t: "There is nothing interesting in this shop. It's {{*boring|exciting|friendly}}." },
+      { id: "exciting", t: "The toy shop has got games, robots and a train. It's {{*exciting|boring|dirty}}!" },
+      { id: "good", t: "The bread at this baker's is delicious. It's a {{*good|bad|quiet}} baker's." },
+      { id: "bad", t: "The fruit at this greengrocer's is old. It's a {{*bad|good|modern}} shop." }
     ] },
   { type: "rule", title: "too / not … enough / (not) as … as", short: "Правило", instr: "Прочитай правило — оно нужно для упр. 7.",
     blocks: [
@@ -421,8 +420,7 @@ const DRILLS = [
       { id: "dirty", ru: "Мои ботинки слишком грязные.", en: "My boots are too dirty.", key: "too dirty" },
       { id: "exciting", ru: "Спортивный магазин не такой интересный, как магазин игрушек.", en: "The sports shop isn't as exciting as the toy shop.", key: "as exciting as" }
     ] },
-  { type: "letters", title: "Собери слово из букв", short: "Буквы", instr: "Нажимай на буквы по порядку, чтобы получилось слово." },
-  { type: "write", title: "Напиши по-английски", short: "Пишем", instr: "Посмотри на перевод и напиши прилагательное. Забыл — вернись к карточкам." }
+  { type: "letters", title: "Собери слово из букв", short: "Буквы", instr: "Нажимай на буквы по порядку, чтобы получилось слово." }
 ];
 
 /* ===== Drill engine (shared). Expects META, P, DRILLS defined before this script. ===== */
